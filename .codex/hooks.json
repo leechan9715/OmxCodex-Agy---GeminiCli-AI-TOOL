@@ -1,0 +1,99 @@
+{
+  "state": {
+    "/home/sc/omxtest/.codex/hooks.json:session_start:0:0": {
+      "trusted_hash": "sha256:9fc02dc2e4360ba32c6e0ab8ca19b2518a7cbd3af9b2673e99640268268dbb2c"
+    },
+    "/home/sc/omxtest/.codex/hooks.json:pre_tool_use:0:0": {
+      "trusted_hash": "sha256:7da3a3622a71968e054293319ec86562c9727a6ac550ed91eb79ec1b4e976dca"
+    },
+    "/home/sc/omxtest/.codex/hooks.json:post_tool_use:0:0": {
+      "trusted_hash": "sha256:56ea26aea2ebf3a52c87859a047b89a4c8b1d9c4de7567083461f69713555091"
+    },
+    "/home/sc/omxtest/.codex/hooks.json:user_prompt_submit:0:0": {
+      "trusted_hash": "sha256:c969ee870d188aef9ee30ab98fb31e11f0216bc5a91bdf4ee153e84c0de394cd"
+    },
+    "/home/sc/omxtest/.codex/hooks.json:pre_compact:0:0": {
+      "trusted_hash": "sha256:aaf0c1978f38893a9ef1964a82423d883e3bb814ef79d2514a5802c21c1ba7e1"
+    },
+    "/home/sc/omxtest/.codex/hooks.json:post_compact:0:0": {
+      "trusted_hash": "sha256:47886458cf8b75c16ed9423e88718e96ad7712b9deb38f0f0049a49c707800a5"
+    },
+    "/home/sc/omxtest/.codex/hooks.json:stop:0:0": {
+      "trusted_hash": "sha256:0fa5559dbbf50f05fd1e15c4927b1f8b5fd1195e02d24dfe0e441946f2a63036"
+    }
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"/home/sc/.nvm/versions/node/v24.15.0/bin/node\" \"/home/sc/.nvm/versions/node/v24.15.0/lib/node_modules/oh-my-codex/dist/scripts/codex-native-hook.js\""
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"/home/sc/.nvm/versions/node/v24.15.0/bin/node\" \"/home/sc/.nvm/versions/node/v24.15.0/lib/node_modules/oh-my-codex/dist/scripts/codex-native-hook.js\""
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"/home/sc/.nvm/versions/node/v24.15.0/bin/node\" \"/home/sc/.nvm/versions/node/v24.15.0/lib/node_modules/oh-my-codex/dist/scripts/codex-native-hook.js\""
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"/home/sc/.nvm/versions/node/v24.15.0/bin/node\" \"/home/sc/.nvm/versions/node/v24.15.0/lib/node_modules/oh-my-codex/dist/scripts/codex-native-hook.js\""
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"/home/sc/.nvm/versions/node/v24.15.0/bin/node\" \"/home/sc/.nvm/versions/node/v24.15.0/lib/node_modules/oh-my-codex/dist/scripts/codex-native-hook.js\""
+          }
+        ]
+      }
+    ],
+    "PostCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"/home/sc/.nvm/versions/node/v24.15.0/bin/node\" \"/home/sc/.nvm/versions/node/v24.15.0/lib/node_modules/oh-my-codex/dist/scripts/codex-native-hook.js\""
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"/home/sc/.nvm/versions/node/v24.15.0/bin/node\" \"/home/sc/.nvm/versions/node/v24.15.0/lib/node_modules/oh-my-codex/dist/scripts/codex-native-hook.js\"",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}

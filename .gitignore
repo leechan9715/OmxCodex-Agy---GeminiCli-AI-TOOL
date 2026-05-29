@@ -1,0 +1,34 @@
+# oh-my-codex (OMX) gitignore configuration
+
+# Ignore all compact state and cache folders
+.omx/
+
+# Ignore all contents in .codex by default (locks personal credentials)
+.codex/*
+
+# Force include only the essential shared configs and agent directives
+!.codex/agents/
+!.codex/agents/**
+!.codex/prompts/
+!.codex/prompts/**
+!.codex/skills/
+!.codex/skills/**
+!.codex/config.toml
+!.codex/hooks.json
+
+# Explicitly lock SQLite databases, local session states, and credentials
+.codex/auth.json
+.codex/*.sqlite
+.codex/*.sqlite-shm
+.codex/*.sqlite-wal
+.codex/skills/.system/**
+
+# Ignore tmux temporary pane IDs and remote command buffer states
+.*-pane
+.ask-*-last
+
+# Standard runtime and local env overrides
+node_modules/
+.DS_Store
+Thumbs.db
+
