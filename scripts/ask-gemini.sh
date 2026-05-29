@@ -57,6 +57,11 @@ if [ "$DONE_MODE" -eq 1 ]; then
   fi
 fi
 
+# Auto-inject '$code-reviewer' prefix to restrict agent to read-only review sandbox
+if [ -n "$PROMPT" ] && [[ ! "$PROMPT" =~ ^\$ ]]; then
+  PROMPT="\$code-reviewer $PROMPT"
+fi
+
 STATE_FILE="$PROJECT_ROOT/.ask-gemini-last"
 DEDUPE_SECONDS="${ASK_DEDUPE_SECONDS:-30}"
 

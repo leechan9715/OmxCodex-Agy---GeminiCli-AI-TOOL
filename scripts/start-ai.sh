@@ -8,12 +8,12 @@ OMX_LAUNCH_CMD="${OMX_LAUNCH_CMD:-omx --direct}"
 
 case "$REVIEWER" in
   agy)
-    REVIEWER_CMD="omx --agent code-reviewer"
+    REVIEWER_CMD="omx --direct"
     REVIEWER_PANE_FILE="$PROJECT/.agy-pane"
     STALE_PANE_FILE="$PROJECT/.gemini-pane"
     ;;
   gemini)
-    REVIEWER_CMD="omx --agent code-reviewer"
+    REVIEWER_CMD="omx --direct"
     REVIEWER_PANE_FILE="$PROJECT/.gemini-pane"
     STALE_PANE_FILE="$PROJECT/.agy-pane"
     ;;
