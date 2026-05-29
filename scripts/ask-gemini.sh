@@ -3,7 +3,7 @@ set -euo pipefail
 
 PROJECT_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 PANE_FILE="$PROJECT_ROOT/.gemini-pane"
-EXPECTED_CMD_PATTERN='(^|[ /])(gemini|omx(\.js)?|codex)([[:space:]]|$)'
+EXPECTED_CMD="gemini"
 
 if [ ! -f "$PANE_FILE" ]; then
   echo "Gemini pane id file not found: $PANE_FILE"
@@ -57,9 +57,16 @@ if [ "$DONE_MODE" -eq 1 ]; then
   fi
 fi
 
-# Auto-inject '$code-reviewer' prefix to restrict agent to read-only review sandbox
-if [ -n "$PROMPT" ] && [[ ! "$PROMPT" =~ ^\$ ]]; then
-  PROMPT="\$code-reviewer $PROMPT"
+# Auto-inject code-reviewer prompts and rules from .codex/prompts/code-reviewer.md
+SYSTEM_PROMPT_FILE="$PROJECT_ROOT/.codex/prompts/code-reviewer.md"
+if [ -n "$PROMPT" ] && [ -f "$SYSTEM_PROMPT_FILE" ] && [[ ! "$PROMPT" =~ ^\[SYSTEM_RULES\] ]]; then
+  # Read the core identity and scope constraints (first 35 lines)
+  SYSTEM_RULES="$(head -n 35 "$SYSTEM_PROMPT_FILE" 2>/dev/null || echo "")"
+  PROMPT="[SYSTEM_RULES: Act strictly under these constraints:
+$SYSTEM_RULES
+]
+
+USER_REQUEST: $PROMPT"
 fi
 
 STATE_FILE="$PROJECT_ROOT/.ask-gemini-last"
@@ -73,10 +80,10 @@ if [ -z "$PANE_PID" ]; then
   exit 1
 fi
 
-if ! pgrep -a -P "$PANE_PID" | grep -Eq "$EXPECTED_CMD_PATTERN"; then
+if ! pgrep -a -P "$PANE_PID" | grep -Eq "(^|[ /])${EXPECTED_CMD}([[:space:]]|$)"; then
   ACTUAL_CMD="$(pgrep -a -P "$PANE_PID" | head -n 1 | awk '{print $2}' || echo "none")"
-  echo "Refusing to send prompt: target pane $PANE_ID is running '$ACTUAL_CMD' (shell reported '$PANE_COMMAND'), not gemini/omx/codex."
-  echo "If it is running, please ensure it is a direct child of the shell in pane $PANE_ID."
+  echo "Refusing to send prompt: target pane $PANE_ID is running '$ACTUAL_CMD' (shell reported '$PANE_COMMAND'), not $EXPECTED_CMD."
+  echo "If $EXPECTED_CMD is running, please ensure it is a direct child of the shell in pane $PANE_ID."
   exit 1
 fi
 
