@@ -58,15 +58,40 @@ if [ "$DONE_MODE" -eq 1 ]; then
 fi
 
 # Auto-inject code-reviewer prompts and rules from .codex/prompts/code-reviewer.md
-SYSTEM_PROMPT_FILE="$PROJECT_ROOT/.codex/prompts/code-reviewer.md"
-if [ -n "$PROMPT" ] && [ -f "$SYSTEM_PROMPT_FILE" ] && [[ ! "$PROMPT" =~ ^\[SYSTEM_RULES\] ]]; then
-  # Read the core identity and scope constraints (first 35 lines)
-  SYSTEM_RULES="$(head -n 35 "$SYSTEM_PROMPT_FILE" 2>/dev/null || echo "")"
-  PROMPT="[SYSTEM_RULES: Act strictly under these constraints:
+# Or dynamically load specific agent prompts if $agent prefix is used
+if [ -n "$PROMPT" ] && [[ "$PROMPT" =~ ^\$([a-zA-Z0-9_-]+)[[:space:]]*(.*)$ ]]; then
+  AGENT_NAME="${BASH_REMATCH[1]}"
+  USER_SUB_PROMPT="${BASH_REMATCH[2]}"
+  SYSTEM_PROMPT_FILE="$PROJECT_ROOT/.codex/prompts/${AGENT_NAME}.md"
+  
+  if [ -f "$SYSTEM_PROMPT_FILE" ]; then
+    SYSTEM_RULES="$(head -n 35 "$SYSTEM_PROMPT_FILE" 2>/dev/null || echo "")"
+    PROMPT="[SYSTEM_RULES: Act strictly under the instructions of the ${AGENT_NAME} agent defined here:
+$SYSTEM_RULES
+]
+
+USER_REQUEST: $USER_SUB_PROMPT"
+  else
+    # Fallback to default code-reviewer if agent spec not found
+    SYSTEM_PROMPT_FILE="$PROJECT_ROOT/.codex/prompts/code-reviewer.md"
+    SYSTEM_RULES="$(head -n 35 "$SYSTEM_PROMPT_FILE" 2>/dev/null || echo "")"
+    PROMPT="[SYSTEM_RULES: Act strictly under these constraints:
 $SYSTEM_RULES
 ]
 
 USER_REQUEST: $PROMPT"
+  fi
+else
+  # Default to code-reviewer when no explicit agent is requested
+  SYSTEM_PROMPT_FILE="$PROJECT_ROOT/.codex/prompts/code-reviewer.md"
+  if [ -n "$PROMPT" ] && [ -f "$SYSTEM_PROMPT_FILE" ] && [[ ! "$PROMPT" =~ ^\[SYSTEM_RULES\] ]]; then
+    SYSTEM_RULES="$(head -n 35 "$SYSTEM_PROMPT_FILE" 2>/dev/null || echo "")"
+    PROMPT="[SYSTEM_RULES: Act strictly under these constraints:
+$SYSTEM_RULES
+]
+
+USER_REQUEST: $PROMPT"
+  fi
 fi
 
 STATE_FILE="$PROJECT_ROOT/.ask-gemini-last"
